@@ -10,7 +10,7 @@ module "monitoring" {
   oidc_provider_url             = module.eks.oidc_provider_url # https:// 포함돼도 모듈에서 제거
   booking_queue_arn             = module.sqs.queue_arn         # sqs 모듈 output 이름
   cluster_name                  = module.eks.cluster_name      # CA 태그 조건 + ASG discovery 키
-  role_permissions_boundary_arn = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  role_permissions_boundary_arn = var.permissions_boundary_arn
 
   keda_namespace       = "keda"
   keda_service_account = "keda-operator"

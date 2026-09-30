@@ -40,3 +40,9 @@ team_member_user_arns = {
   "sungmin" = { arn = "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/YOUR_IAM_USERNAME_4", role = "developer" }
   "hyeonsu" = { arn = "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/YOUR_IAM_USERNAME_5", role = "developer" }
 }
+
+# IAM permissions boundary (조직 정책상 필요한 경우에만 지정, 기본값 null)
+# permissions_boundary_arn = "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:policy/YOUR_BOUNDARY_POLICY"
+
+# EKS KMS 키 관리자 (비워두면 terraform 실행 주체가 관리자로 등록됨)
+# eks_kms_key_administrators = ["arn:aws:iam::YOUR_AWS_ACCOUNT_ID:user/YOUR_IAM_USERNAME"]

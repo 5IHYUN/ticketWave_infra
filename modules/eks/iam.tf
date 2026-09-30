@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "eks_pod_identity_assume" {
 # =====================================
 resource "aws_iam_role" "lbc" {
   name                 = "team5-${var.environment}-lbc-role"
-  permissions_boundary = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  permissions_boundary = var.permissions_boundary_arn
   assume_role_policy   = data.aws_iam_policy_document.eks_pod_identity_assume.json
 
   tags = {
@@ -210,7 +210,7 @@ resource "aws_eks_pod_identity_association" "lbc" {
 # =====================================
 resource "aws_iam_role" "eso" {
   name                 = "team5-${var.environment}-eso-role"
-  permissions_boundary = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  permissions_boundary = var.permissions_boundary_arn
   assume_role_policy   = data.aws_iam_policy_document.eks_pod_identity_assume.json
 
   tags = {
@@ -271,7 +271,7 @@ resource "aws_eks_pod_identity_association" "eso" {
 # =====================================
 resource "aws_iam_role" "external_dns" {
   name                 = "team5-${var.environment}-external-dns-role"
-  permissions_boundary = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  permissions_boundary = var.permissions_boundary_arn
   assume_role_policy   = data.aws_iam_policy_document.eks_pod_identity_assume.json
 
   tags = {
@@ -331,9 +331,9 @@ module "cluster_autoscaler_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.0"
 
-  role_name                     = "team5-${var.environment}-cluster-autoscaler"
-  role_permissions_boundary_arn = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
-  policy_name_prefix            = "team5-"
+  role_name                        = "team5-${var.environment}-cluster-autoscaler"
+  role_permissions_boundary_arn    = var.permissions_boundary_arn
+  policy_name_prefix               = "team5-"
   attach_cluster_autoscaler_policy = true
   cluster_autoscaler_cluster_names = [module.eks.cluster_name]
 
@@ -350,7 +350,7 @@ module "cluster_autoscaler_irsa" {
 # =====================================
 resource "aws_iam_role" "app_sqs" {
   name                 = "team5-${var.environment}-app-sqs-role"
-  permissions_boundary = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  permissions_boundary = var.permissions_boundary_arn
   assume_role_policy   = data.aws_iam_policy_document.eks_pod_identity_assume.json
 
   tags = {

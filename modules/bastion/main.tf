@@ -28,7 +28,7 @@ resource "aws_security_group" "bastion" {
 
 resource "aws_iam_role" "bastion" {
   name                 = "team5-${var.environment}-bastion-role"
-  permissions_boundary = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  permissions_boundary = var.permissions_boundary_arn
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

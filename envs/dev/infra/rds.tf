@@ -17,4 +17,5 @@ module "database" {
   db_backup_retention      = var.db_backup_retention
   eks_node_sg_id           = module.eks.node_security_group_id
   bastion_sg_id            = module.bastion.bastion_sg_id
+  permissions_boundary_arn = var.permissions_boundary_arn
 }

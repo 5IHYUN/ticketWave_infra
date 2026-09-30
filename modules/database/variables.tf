@@ -80,3 +80,9 @@ variable "bastion_sg_id" {
   type        = string
   description = "Security group ID of the Bastion host"
 }
+
+variable "permissions_boundary_arn" {
+  type        = string
+  description = "IAM 역할에 적용할 permissions boundary 정책 ARN (없으면 null)"
+  default     = null
+}

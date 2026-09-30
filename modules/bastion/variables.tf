@@ -18,3 +18,9 @@ variable "allowed_ssh_cidrs" {
   default     = []
   description = "Allowed CIDR blocks for SSH (rely on SSM if empty)"
 }
+
+variable "permissions_boundary_arn" {
+  type        = string
+  description = "IAM 역할에 적용할 permissions boundary 정책 ARN (없으면 null)"
+  default     = null
+}

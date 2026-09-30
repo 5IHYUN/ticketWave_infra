@@ -170,7 +170,7 @@ resource "aws_secretsmanager_secret_version" "db_credentials" {
 # IAM Role and Policy for RDS Proxy to access Secrets Manager
 resource "aws_iam_role" "rds_proxy" {
   name                 = "team5-${var.environment}-rds-proxy-role"
-  permissions_boundary = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  permissions_boundary = var.permissions_boundary_arn
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
