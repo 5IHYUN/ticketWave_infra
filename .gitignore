@@ -56,3 +56,5 @@ aws-power.ps1
 
 # Infracost cache/pricing files
 .infracost/
+# IDE
+.idea/

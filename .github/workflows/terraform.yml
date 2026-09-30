@@ -24,19 +24,20 @@ on:
       - "modules/**"
       - ".github/workflows/terraform.yml"
 
-  # main merge 후 변경 환경 apply 실행
-  push:
-    branches:
-      - main
-    paths:
-      - "envs/**"
-      - "modules/**"
-      - ".github/workflows/terraform.yml"
+  # main push 자동 apply는 비활성화 (개인 계정 비용 관리: apply는 workflow_dispatch로만 실행)
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "envs/**"
+  #     - "modules/**"
+  #     - ".github/workflows/terraform.yml"
 
 # workflow 전체 공통 설정값
 env:
   AWS_REGION: ap-northeast-2
-  AWS_ACCOUNT_ID: "194722398200"
+  # 저장소 Settings > Secrets and variables > Actions > Variables 에 AWS_ACCOUNT_ID 등록
+  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
   TERRAFORM_VERSION: "1.11.4"
 
 # GitHub OIDC 인증 및 PR plan 코멘트 권한

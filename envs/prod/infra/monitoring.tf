@@ -11,7 +11,7 @@ module "monitoring" {
   oidc_provider_url             = module.eks.oidc_provider_url
   booking_queue_arn             = module.sqs.queue_arn
   cluster_name                  = module.eks.cluster_name
-  role_permissions_boundary_arn = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  role_permissions_boundary_arn = var.permissions_boundary_arn
 
   # config repo의 system-addons/overlays/prod/keda.yaml 설정과 일치해야 한다.
   keda_namespace       = "keda"

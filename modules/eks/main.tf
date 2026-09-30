@@ -10,10 +10,9 @@ module "eks" {
   cluster_name    = "team5-${var.environment}-eks"
   cluster_version = "1.35"
 
-  iam_role_permissions_boundary = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
-  kms_key_administrators = [
-    "arn:aws:iam::194722398200:user/team5-ljh"
-  ]
+  iam_role_permissions_boundary = var.permissions_boundary_arn
+  # 빈 리스트면 terraform을 실행한 IAM 주체가 KMS 키 관리자로 등록된다.
+  kms_key_administrators = var.kms_key_administrators
 
   vpc_id     = var.vpc_id
   subnet_ids = var.subnet_ids
@@ -54,8 +53,8 @@ module "eks" {
         name            = "team5-${var.environment}-eks-app-ng"
         use_name_prefix = false
 
-        ami_type       = "AL2023_x86_64_STANDARD"
-        instance_types = var.node_instance_types
+        ami_type                   = "AL2023_x86_64_STANDARD"
+        instance_types             = var.node_instance_types
         max_pods                   = 110
         enable_bootstrap_user_data = true
 
@@ -66,7 +65,7 @@ module "eks" {
         # EKS 모듈이 노드그룹 IAM 역할을 직접 생성 및 관리하도록 설정 복구
         iam_role_name                 = "team5-${var.environment}-node-group"
         iam_role_use_name_prefix      = false
-        iam_role_permissions_boundary = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+        iam_role_permissions_boundary = var.permissions_boundary_arn
 
         block_device_mappings = {
           xvda = {
@@ -100,8 +99,8 @@ module "eks" {
         name            = "team5-${var.environment}-eks-runner-ng"
         use_name_prefix = false
 
-        ami_type       = "AL2023_x86_64_STANDARD"
-        instance_types = var.node_instance_types
+        ami_type                   = "AL2023_x86_64_STANDARD"
+        instance_types             = var.node_instance_types
         max_pods                   = 110
         enable_bootstrap_user_data = true
 
@@ -111,7 +110,7 @@ module "eks" {
         max_size     = 10
 
         create_iam_role = false
-        iam_role_arn    = "arn:aws:iam::194722398200:role/team5-${var.environment}-node-group"
+        iam_role_arn    = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/team5-${var.environment}-node-group"
 
         block_device_mappings = {
           xvda = {
@@ -165,7 +164,7 @@ module "ebs_csi_irsa" {
   version = "~> 5.0"
 
   role_name                     = "team5-${var.environment}-ebs-csi"
-  role_permissions_boundary_arn = "arn:aws:iam::194722398200:policy/TeamRuntimeBoundary"
+  role_permissions_boundary_arn = var.permissions_boundary_arn
   policy_name_prefix            = "team5-"
   attach_ebs_csi_policy         = true
 

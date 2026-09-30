@@ -13,4 +13,6 @@ module "eks" {
   bastion_role_arn               = module.bastion.bastion_role_arn
   team_member_user_arns          = var.team_member_user_arns
   bastion_sg_id                  = module.bastion.bastion_sg_id
+  permissions_boundary_arn       = var.permissions_boundary_arn
+  kms_key_administrators         = var.eks_kms_key_administrators
 }

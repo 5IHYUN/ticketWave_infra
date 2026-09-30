@@ -182,3 +182,15 @@ variable "allowed_ssh_cidrs" {
   type    = list(string)
   default = []
 }
+
+variable "permissions_boundary_arn" {
+  type        = string
+  description = "IAM 역할에 적용할 permissions boundary 정책 ARN (조직 정책상 필요할 때만 지정)"
+  default     = null
+}
+
+variable "eks_kms_key_administrators" {
+  type        = list(string)
+  description = "EKS KMS 키 관리자 IAM ARN 목록 (빈 리스트면 terraform 실행 주체)"
+  default     = []
+}
