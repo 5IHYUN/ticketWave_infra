@@ -81,3 +81,21 @@ variable "kms_key_administrators" {
   description = "EKS 시크릿 암호화 KMS 키 관리자 IAM ARN 목록 (빈 리스트면 terraform 실행 주체)"
   default     = []
 }
+
+variable "cluster_enabled_log_types" {
+  type        = list(string)
+  description = "CloudWatch로 보낼 EKS 컨트롤 플레인 로그 종류"
+  default     = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+}
+
+variable "cluster_log_retention_days" {
+  type        = number
+  description = "EKS 컨트롤 플레인 로그 보존 기간(일)"
+  default     = 30
+}
+
+variable "poster_bucket_name" {
+  type        = string
+  description = "앱 S3 권한 대상 포스터 버킷 이름 (null이면 team5-<env>-poster-bucket)"
+  default     = null
+}

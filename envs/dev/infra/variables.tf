@@ -87,8 +87,10 @@ variable "db_username" {
 }
 
 variable "db_engine_version" {
-  type    = string
-  default = "8.0"
+  type = string
+  # MySQL 8.0: RDS 표준 지원 종료(2026-07-31) → 신규 생성 시 유료 Extended Support 자동 가입
+  # 8.4 LTS 사용 (로컬 docker-compose mysql 이미지와 동일 버전 유지)
+  default = "8.4"
 }
 
 variable "db_allocated_storage" {

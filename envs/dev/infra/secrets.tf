@@ -11,4 +11,7 @@ module "secrets" {
   redis_port     = module.elasticache.redis_port
   sqs_queue_url  = module.sqs.queue_url
   sqs_queue_arn  = module.sqs.queue_arn
+
+  # 검증일 단위 생성·삭제 → 삭제 즉시 같은 이름 재생성 가능해야 함
+  recovery_window_in_days = 0
 }

@@ -8,6 +8,12 @@ variable "environment" {
   description = "The environment name (e.g. dev, prod)"
 }
 
+variable "force_destroy" {
+  type        = bool
+  description = "객체가 남아 있어도 버킷 삭제 허용 (생성·삭제 반복 환경용)"
+  default     = false
+}
+
 variable "enable_cloudfront" {
   type        = bool
   description = "Whether to serve poster images through CloudFront with OAC"
@@ -15,7 +21,8 @@ variable "enable_cloudfront" {
 }
 
 resource "aws_s3_bucket" "poster_bucket" {
-  bucket = var.bucket_name
+  bucket        = var.bucket_name
+  force_destroy = var.force_destroy
 
   tags = {
     Name        = var.bucket_name
