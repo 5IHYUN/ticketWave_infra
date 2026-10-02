@@ -1,6 +1,10 @@
+# EKS 컨트롤 플레인 로그 그룹 (Terraform 관리 → destroy 시 함께 삭제)
+#   이름은 EKS 규칙 /aws/eks/<클러스터 이름>/cluster 와 일치해야 함
+#   기존: team5-<env>-cluster (클러스터 이름 team5-<env>-eks와 불일치)
+#   → EKS가 보존 기간 무제한 로그 그룹을 별도 자동 생성, destroy 후에도 잔존
 resource "aws_cloudwatch_log_group" "eks_cluster" {
-  name              = "/aws/eks/team5-${var.environment}-cluster/cluster"
-  retention_in_days = 30
+  name              = "/aws/eks/team5-${var.environment}-eks/cluster"
+  retention_in_days = var.cluster_log_retention_days
 }
 
 module "eks" {
@@ -23,7 +27,7 @@ module "eks" {
   authentication_mode = "API_AND_CONFIG_MAP"
 
   create_cloudwatch_log_group = false
-  cluster_enabled_log_types   = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  cluster_enabled_log_types   = var.cluster_enabled_log_types
   cluster_addons = {
     coredns = {
       resolve_conflicts = "OVERWRITE"

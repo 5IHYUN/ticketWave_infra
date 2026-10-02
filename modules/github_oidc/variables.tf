@@ -18,3 +18,9 @@ variable "github_repositories" {
     "5IHYUN/ticketWave_config",
   ]
 }
+
+variable "create_oidc_provider" {
+  type        = bool
+  description = "GitHub OIDC provider 생성 여부 (계정에 없을 때 true, 계정당 1곳에서만)"
+  default     = false
+}

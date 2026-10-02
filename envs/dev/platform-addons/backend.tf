@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket       = "tfstate-lionkdt5-team5"
+    bucket       = "ticketwave-tfstate-5ihyun" # bootstrap-backend에서 생성
     key          = "dev/platform-addons/terraform.tfstate"
     region       = "ap-northeast-2"
     encrypt      = true

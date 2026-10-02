@@ -15,4 +15,11 @@ module "eks" {
   bastion_sg_id                  = module.bastion.bastion_sg_id
   permissions_boundary_arn       = var.permissions_boundary_arn
   kms_key_administrators         = var.eks_kms_key_administrators
+  poster_bucket_name             = module.s3.bucket_name
+
+  # 컨트롤 플레인 로그: dev는 비용 절감 위해 최소화
+  #   audit(요청량 비례, 가장 큼)·controllerManager·scheduler 제외
+  #   api(API 서버 오류·경고), authenticator(IAM 인증 실패 확인용)만 유지
+  cluster_enabled_log_types  = ["api", "authenticator"]
+  cluster_log_retention_days = 7
 }

@@ -62,3 +62,9 @@ variable "db_replica_endpoint" {
   type        = string
   default     = ""
 }
+
+variable "recovery_window_in_days" {
+  type        = number
+  description = "시크릿 삭제 후 복구 대기 기간(일). 0이면 즉시 삭제 (생성·삭제 반복 환경용)"
+  default     = 30
+}

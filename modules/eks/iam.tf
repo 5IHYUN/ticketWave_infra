@@ -1,5 +1,10 @@
 data "aws_caller_identity" "current" {}
 
+locals {
+  # 앱 S3 권한 대상 버킷 (미지정 시 기존 이름 규칙 유지 → prod 영향 없음)
+  poster_bucket_name = coalesce(var.poster_bucket_name, "team5-${var.environment}-poster-bucket")
+}
+
 # =====================================
 # EKS Pod Identity Common Assume Role Doc
 # =====================================
@@ -387,8 +392,8 @@ resource "aws_iam_policy" "app_sqs" {
           "s3:ListBucket"
         ]
         Resource = [
-          "arn:aws:s3:::team5-${var.environment}-poster-bucket",
-          "arn:aws:s3:::team5-${var.environment}-poster-bucket/*"
+          "arn:aws:s3:::${local.poster_bucket_name}",
+          "arn:aws:s3:::${local.poster_bucket_name}/*"
         ]
       }
     ]
