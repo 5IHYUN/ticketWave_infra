@@ -16,6 +16,10 @@ resource "aws_eks_access_policy_association" "bastion" {
   access_scope {
     type = "cluster"
   }
+
+  # principal_arn을 변수로 받아 Terraform이 access entry와의 순서를 모름
+  # → entry 생성 전에 association 시도 시 404(ResourceNotFound) → 명시적 의존성
+  depends_on = [aws_eks_access_entry.bastion]
 }
 
 resource "aws_eks_access_entry" "team_member" {
@@ -40,6 +44,8 @@ resource "aws_eks_access_policy_association" "team_member_dev" {
   access_scope {
     type = "cluster"
   }
+
+  depends_on = [aws_eks_access_entry.team_member]
 }
 
 resource "aws_eks_access_policy_association" "team_member_prod" {
@@ -57,4 +63,6 @@ resource "aws_eks_access_policy_association" "team_member_prod" {
     type       = each.value.role == "admin" ? "cluster" : "namespace"
     namespaces = each.value.role == "admin" ? null : ["default", "app", "monitoring"]
   }
+
+  depends_on = [aws_eks_access_entry.team_member]
 }
