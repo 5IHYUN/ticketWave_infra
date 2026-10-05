@@ -22,11 +22,15 @@ resource "aws_secretsmanager_secret" "app" {
 resource "aws_secretsmanager_secret_version" "app" {
   secret_id = aws_secretsmanager_secret.app.id
 
+  # JDBC: TLS 필수(sslMode=REQUIRED)
+  #   MySQL 8.4 기본 인증(caching_sha2_password)은 평문 연결에서 RSA 공개키 교환 필요
+  #   → RDS Proxy 경유 시 "Authentication requires secure connection"으로 접속 실패
+  #   → TLS로 연결 (기존 useSSL=false, allowPublicKeyRetrieval=true 제거)
   secret_string = jsonencode({
-    SPRING_DATASOURCE_URL         = "jdbc:mysql://${var.db_endpoint}/${var.db_name}?useUnicode=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+    SPRING_DATASOURCE_URL         = "jdbc:mysql://${var.db_endpoint}/${var.db_name}?useUnicode=true&sslMode=REQUIRED&serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
     SPRING_DATASOURCE_USERNAME    = var.db_username
     SPRING_DATASOURCE_PASSWORD    = var.db_password
-    SPRING_DATASOURCE_REPLICA_URL = var.db_replica_endpoint != null && var.db_replica_endpoint != "" ? "jdbc:mysql://${var.db_replica_endpoint}/${var.db_name}?useUnicode=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8" : ""
+    SPRING_DATASOURCE_REPLICA_URL = var.db_replica_endpoint != null && var.db_replica_endpoint != "" ? "jdbc:mysql://${var.db_replica_endpoint}/${var.db_name}?useUnicode=true&sslMode=REQUIRED&serverTimezone=Asia/Seoul&characterEncoding=UTF-8" : ""
     SPRING_DATA_REDIS_HOST        = var.redis_endpoint
     SPRING_DATA_REDIS_PORT        = tostring(var.redis_port)
     AWS_SQS_BOOKING_QUEUE_URL     = var.sqs_queue_url
