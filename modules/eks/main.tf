@@ -62,6 +62,21 @@ module "eks" {
         max_pods                   = 110
         enable_bootstrap_user_data = true
 
+        # AL2023(nodeadm)은 max_pods 값이 kubelet에 반영되지 않음 → NodeConfig로 직접 지정
+        #   미지정 시 t3.medium ENI 기준 17개 → "Too many pods", 불필요한 노드 증설·DaemonSet Pending
+        #   VPC CNI prefix delegation 활성 상태라 110 사용 가능
+        cloudinit_pre_nodeadm = [{
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+            apiVersion: node.eks.aws/v1alpha1
+            kind: NodeConfig
+            spec:
+              kubelet:
+                config:
+                  maxPods: 110
+          EOT
+        }]
+
         desired_size = var.node_desired_size
         min_size     = var.node_min_size
         max_size     = var.node_max_size
